@@ -7,8 +7,8 @@ export class Cliente {
   private readonly _cpf: string;
   private _endereco: string;
   private _renda: number;
-  private _contas: Conta[] = []; // associação 1 → 0..*
-  private _canal: INotificador; // associação com a INTERFACE
+  private _contas: Conta[] = []; 
+  private _canal: INotificador; 
 
   constructor(
     nome: string,
