@@ -1,0 +1,121 @@
+classDiagram
+    direction TB
+
+    class INotificador {
+        <<interface>>
+        +canal: string
+        +enviar(destinatario: Cliente, mensagem: string) void
+    }
+    class NotificadorSMS {
+        +canal: string
+        +enviar(destinatario, mensagem) void
+    }
+    class NotificadorEmail {
+        +canal: string
+        +enviar(destinatario, mensagem) void
+    }
+    class NotificadorApp {
+        +canal: string
+        +enviar(destinatario, mensagem) void
+    }
+    class NotificadorWhatsApp {
+        +canal: string
+        +enviar(destinatario, mensagem) void
+    }
+
+    class Cliente {
+        -nome: string
+        -cpf: string
+        -endereco: string
+        -renda: number
+        -contas: Conta[]
+        -canal: INotificador
+        +definirCanal(canal: INotificador) void
+        +vincularConta(conta: Conta) void
+        +notificar(mensagem: string) void
+    }
+
+    class Conta {
+        <<abstract>>
+        -numero: string
+        -agencia: string
+        -dataAbertura: Date
+        -saldo: number
+        -bloqueada: boolean
+        -sacadoHoje: number
+        +limiteDiario* number
+        +tipo* string
+        +consultarSaldo() number
+        +depositar(valor: number) void
+        +sacar(valor: number) void
+        +bloquear() void
+        +desbloquear() void
+        +reiniciarLimiteDiario() void
+    }
+    class ContaCorrente {
+        +limiteDiario: number
+        +tipo: string
+    }
+    class ContaPoupanca {
+        +limiteDiario: number
+        +tipo: string
+    }
+
+    class Cooperativa {
+        +nome: string
+        -clientes: Cliente[]
+        +cadastrar(cliente: Cliente) void
+        +buscarPorCpf(cpf: string) Cliente
+    }
+
+    class AtendimentoSaque {
+        +executar(conta: Conta, valor: number) boolean
+    }
+
+    class Error {
+        <<built-in>>
+        +message: string
+    }
+    class SaqueError {
+        <<abstract>>
+        +codigo: string
+    }
+    class ValorInvalidoError {
+        +valor: number
+    }
+    class ContaBloqueadaError {
+        +numeroConta: string
+    }
+    class SaldoInsuficienteError {
+        +saldo: number
+        +valor: number
+        +faltante: number
+    }
+    class LimiteDiarioExcedidoError {
+        +limite: number
+        +jaSacado: number
+    }
+
+    %% Realização da interface
+    INotificador <|.. NotificadorSMS
+    INotificador <|.. NotificadorEmail
+    INotificador <|.. NotificadorApp
+    INotificador <|.. NotificadorWhatsApp
+
+    %% Herança
+    Conta <|-- ContaCorrente
+    Conta <|-- ContaPoupanca
+    Error <|-- SaqueError
+    SaqueError <|-- ValorInvalidoError
+    SaqueError <|-- ContaBloqueadaError
+    SaqueError <|-- SaldoInsuficienteError
+    SaqueError <|-- LimiteDiarioExcedidoError
+
+    %% Associações
+    Cliente "1" --> "0..*" Conta : possui
+    Conta "*" --> "1" Cliente : titular
+    Cliente "*" --> "1" INotificador : canal de aviso
+    Cooperativa "1" o-- "*" Cliente : atende
+    AtendimentoSaque ..> Conta : usa
+    AtendimentoSaque ..> SaqueError : captura
+    Conta ..> SaqueError : lança
