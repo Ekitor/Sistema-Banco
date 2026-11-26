@@ -5,6 +5,6 @@ export class NotificadorWhatsApp implements INotificador {
   readonly canal = "WhatsApp";
 
   enviar(destinatario: Cliente, mensagem: string): void {
-    console.log(`   💬 [WHATSAPP → ${destinatario.nome}] ${mensagem}`);
+    console.log(`    [WHATSAPP → ${destinatario.nome}] ${mensagem}`);
   }
 }
