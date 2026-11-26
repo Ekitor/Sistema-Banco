@@ -14,7 +14,7 @@ export abstract class Conta {
   private readonly _numero: string;
   private readonly _agencia: string;
   private readonly _dataAbertura: Date;
-  private readonly _titular: Cliente; // associação Conta → Cliente (N → 1)
+  private readonly _titular: Cliente;
 
   constructor(
     numero: string,
