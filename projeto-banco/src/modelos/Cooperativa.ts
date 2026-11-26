@@ -2,7 +2,7 @@ import type { Cliente } from "./Cliente";
 
 export class Cooperativa {
   readonly nome: string;
-  private _clientes: Cliente[] = []; // associação 1 → 0..*
+  private _clientes: Cliente[] = [];
 
   constructor(nome: string) {
     this.nome = nome;
